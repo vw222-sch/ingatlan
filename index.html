@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <div class="cont">
+        <h1>Ingatlaniroda</h1>
+        <p>ingatlan típusok:</p>
+
+        <div class="gonb">
+            <button id="gonb1">HÁZ</button>
+            <button id="gonb2">LAKÁS</button>
+            <button id="gonb3">NYARALÓ</button>
+        </div>
+    </div>
+    <style>
+        * {
+            margin: 0;
+            color: white;
+            font-family: 'Inter';
+            font-weight: bold;
+        }
+
+        body {
+            background-color: rgb(81, 96, 110);
+        }
+
+        .cont {
+            max-width: 400px;
+        }
+
+        .cont h1 {
+            text-decoration: underline;
+        }
+        .gonb {
+            border-radius: 5px;
+            display: flex;
+            flex-direction: column;
+        }
+        .gonb button {
+            background-color: rgb(95, 114, 131);
+        }
+    </style>
+    <script>
+        const url = "https://raw.githubusercontent.com/mkatay/json_ingatlanok/refs/heads/main/ingatlanok";
+        async function fetchJson(url) {
+            const response = await fetch(url);
+            const jsonData = await response.json();
+            return jsonData;
+        }
+
+    </script>
+</body>
+
+</html>
