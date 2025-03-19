@@ -13,15 +13,18 @@
 </head>
 
 <body>
-    <div class="cont">
+    <div class="container">
         <h1>Ingatlaniroda</h1>
         <p>ingatlan típusok:</p>
 
         <div class="gonb">
-            <button id="gonb1">HÁZ</button>
-            <button id="gonb2">LAKÁS</button>
-            <button id="gonb3">NYARALÓ</button>
+            <button id="gonb1" onclick="clickb(this);">HÁZ</button>
+            <button id="gonb2" onclick="clickb(this);">LAKÁS</button>
+            <button id="gonb3" onclick="clickb(this);">NYARALÓ</button>
         </div>
+    </div>
+    <div class="content">
+
     </div>
     <style>
         * {
@@ -32,32 +35,134 @@
         }
 
         body {
-            background-color: rgb(81, 96, 110);
+            background-color: rgb(62, 85, 107);
         }
 
-        .cont {
-            max-width: 400px;
+        .container {
+            margin: auto;
+            width: 200px;
         }
 
-        .cont h1 {
+        .container h1 {
             text-decoration: underline;
+            margin-bottom: 1.5em;
         }
+
         .gonb {
             border-radius: 5px;
             display: flex;
             flex-direction: column;
         }
+
         .gonb button {
-            background-color: rgb(95, 114, 131);
+            background-color: rgb(88, 116, 141);
+            border: none;
+            border-radius: 5px;
+            padding: 10px;
+        }
+
+        .gonb button:not(.gonb button:last-child) {
+            border-bottom: 2px solid slategray;
+        }
+
+        .content {
+            background-color: rgb(44, 62, 80);
+            max-width: 80vw;
+            margin: auto;
+            margin-top: 1.5em;
+            padding: 2em;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+        }
+
+        .card {
+            position: relative;
+            display: grid;
+            grid-template-columns: 1fr 1.6fr;
+            background-color: rgb(62, 85, 107);
+            padding: 5px;
+            border-radius: 15px;
+        }
+
+        .card img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .card div p {
+            /* margin-bottom: 1rem; */
+            font-weight: 300;
+        }
+
+        .card div {
+            margin: 15px 0px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .circle {
+            position: absolute;
+            /* top: -15px; */
+            top: 2px;
+            right: 2px;
+            margin: 0;
+            border-radius: 50%;
+            border: 1px solid white;
+            padding: 7px;
+        }
+
+        @media (max-width: 900px) {
+            .card {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .content {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
     <script>
         const url = "https://raw.githubusercontent.com/mkatay/json_ingatlanok/refs/heads/main/ingatlanok";
+        const urlPhoto = 'https://raw.githubusercontent.com/mkatay/JF_Kando_vizsga_forras/refs/heads/master/public/'
+        const content = document.querySelector(".content");
+        let data;
         async function fetchJson(url) {
             const response = await fetch(url);
             const jsonData = await response.json();
             return jsonData;
         }
+
+        function genCard(img, seller, area, rooms, date, type) {
+            return `
+            <div class="card">
+                <img
+                    src="${img}">
+                <div class="stats">
+                    <p>Eladó: <span style="font-size: large;">${seller}</span></p>
+                    <p>Területe: <span>${area}m^2</span> Szobák száma: <span>${rooms}</span></p>
+                    <p>A hírdetés feladási dátuma: <span>${date}</span></p>
+                    
+                </div>
+                <p class="circle">${type}</p>
+            </div>
+            `
+        }
+        function clickb(obj) {
+            content.innerHTML = "";
+            data.filter(m => m.category === obj.innerText.toLowerCase()).forEach(v => {
+                content.innerHTML += genCard(urlPhoto + v.imageUrl, v.sellerName, v.area, v.rooms, v.createAt, v.category);
+            })
+        }
+        async function main() {
+            data = await fetchJson(url);
+        }
+        main();
 
     </script>
 </body>
